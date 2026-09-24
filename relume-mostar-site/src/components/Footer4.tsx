@@ -1,4 +1,5 @@
 import { FacebookLogo, InstagramLogo, LinkedinLogo, XLogo, YoutubeLogo } from "relume-icons";
+import { asset } from "@/lib/asset";
 
 type ImageProps = {
   url?: string;
@@ -86,7 +87,7 @@ export const Footer4 = (props: Footer4Props) => {
 export const Footer4Defaults: Props = {
   logo: {
     url: "#cinema",
-    src: "/images/efeuhaus/07_Vordergrund.webp",
+    src: asset("/images/efeuhaus/07_Vordergrund.webp"),
     alt: "Mostar logo mark",
   },
   columnLinks: [

@@ -1,13 +1,14 @@
 import { useEffect, useRef } from "react";
+import { asset } from "@/lib/asset";
 import "./mostar.css";
 
-const SKY = "/images/efeuhaus/01_Sky.webp";
-const BACK_FOUR = "/images/efeuhaus/02_Glow_Hauptszene.webp";
-const BACK_BAZAAR = "/images/efeuhaus/03_Mid-Back.webp";
-const SPLIT_LEFT = "/images/efeuhaus/05_Splitframe_Links.webp";
-const SPLIT_RIGHT = "/images/efeuhaus/06_Splitframe_Rechts.webp";
-const BRIDGE = "/images/efeuhaus/04_Close-up.webp";
-const FRAME_TWO = "/images/efeuhaus/07_Vordergrund.webp";
+const SKY = asset("/images/efeuhaus/01_Sky.webp");
+const BACK_FOUR = asset("/images/efeuhaus/02_Glow_Hauptszene.webp");
+const BACK_BAZAAR = asset("/images/efeuhaus/03_Mid-Back.webp");
+const SPLIT_LEFT = asset("/images/efeuhaus/05_Splitframe_Links.webp");
+const SPLIT_RIGHT = asset("/images/efeuhaus/06_Splitframe_Rechts.webp");
+const BRIDGE = asset("/images/efeuhaus/04_Close-up.webp");
+const FRAME_TWO = asset("/images/efeuhaus/07_Vordergrund.webp");
 
 const ICON1 =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260730_230438_d526b8b6-8a2e-4e3b-9993-3908acae03a7.png";

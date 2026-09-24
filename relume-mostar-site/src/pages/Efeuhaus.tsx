@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { asset } from "@/lib/asset";
 import "./efeuhaus.css";
 
 // Hero composition taken directly from the Figma "Efeuhaus Parallax-Szene"
@@ -150,7 +151,7 @@ export default function Efeuhaus() {
           }}
         >
           <img
-            src="/images/figma-hero/07D.png"
+            src={asset("/images/figma-hero/07D.png")}
             alt=""
             aria-hidden="true"
             draggable={false}
@@ -188,7 +189,7 @@ export default function Efeuhaus() {
           }}
         >
           <img
-            src="/images/figma-hero/05_base.png"
+            src={asset("/images/figma-hero/05_base.png")}
             alt=""
             aria-hidden="true"
             draggable={false}
@@ -210,7 +211,7 @@ export default function Efeuhaus() {
           }}
         >
           <img
-            src="/images/figma-hero/03_MidBack.png"
+            src={asset("/images/figma-hero/03_MidBack.png")}
             alt=""
             aria-hidden="true"
             draggable={false}
@@ -231,8 +232,8 @@ export default function Efeuhaus() {
             opacity: 0.56,
             zIndex: 40,
             willChange: "transform",
-            maskImage: 'url("/images/figma-hero/04_SplitframeRechts_mask.svg")',
-            WebkitMaskImage: 'url("/images/figma-hero/04_SplitframeRechts_mask.svg")',
+            maskImage: `url("${asset("/images/figma-hero/04_SplitframeRechts_mask.svg")}")`,
+            WebkitMaskImage: `url("${asset("/images/figma-hero/04_SplitframeRechts_mask.svg")}")`,
             maskRepeat: "no-repeat",
             WebkitMaskRepeat: "no-repeat",
             maskSize: "45% 100%",
@@ -242,7 +243,7 @@ export default function Efeuhaus() {
           }}
         >
           <img
-            src="/images/figma-hero/04_SplitframeRechts.png"
+            src={asset("/images/figma-hero/04_SplitframeRechts.png")}
             alt=""
             aria-hidden="true"
             draggable={false}
@@ -272,7 +273,7 @@ export default function Efeuhaus() {
             }}
           >
             <img
-              src="/images/figma-hero/02_CloseUp.png"
+              src={asset("/images/figma-hero/02_CloseUp.png")}
               alt=""
               aria-hidden="true"
               draggable={false}
@@ -295,7 +296,7 @@ export default function Efeuhaus() {
           }}
         >
           <img
-            src="/images/figma-hero/01_Vordergrund.png"
+            src={asset("/images/figma-hero/01_Vordergrund.png")}
             alt=""
             aria-hidden="true"
             draggable={false}
