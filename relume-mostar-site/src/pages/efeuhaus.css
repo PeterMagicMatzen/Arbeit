@@ -1,11 +1,4 @@
-@font-face {
-  font-family: "Ogg Medium";
-  src: url("https://dcym8fthxf5uu.cloudfront.net/fonts/247a073c-29f5-4a89-aa3a-741020f346fc/OggText-Medium.woff2")
-    format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap");
 
 .efeuhaus-canvas {
   background: #0a0c0b;
@@ -37,7 +30,7 @@
 
 .efeuhaus-headline {
   color: #f2f0e9;
-  font-family: "Ogg Medium", Georgia, serif;
+  font-family: "Cormorant Garamond", ui-serif, Georgia, serif;
   font-size: clamp(2.6rem, 6.2vw, 6.4rem);
   text-shadow: 0 2px 40px rgba(10, 12, 11, 0.45);
 }
