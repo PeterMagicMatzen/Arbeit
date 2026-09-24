@@ -1,0 +1,54 @@
+@font-face {
+  font-family: "Ogg Medium";
+  src: url("https://dcym8fthxf5uu.cloudfront.net/fonts/247a073c-29f5-4a89-aa3a-741020f346fc/OggText-Medium.woff2")
+    format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+.efeuhaus-canvas {
+  background: #0a0c0b;
+  font-family: Inter, Satoshi, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.efeuhaus-back {
+  position: absolute;
+  top: 1.75rem;
+  left: 1.75rem;
+  z-index: 80;
+  color: #f2f0e9;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.2s ease;
+}
+
+.efeuhaus-back:hover {
+  opacity: 1;
+}
+
+.efeuhaus-kicker {
+  color: #7c8472;
+  font-family: Inter, Satoshi, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.efeuhaus-headline {
+  color: #f2f0e9;
+  font-family: "Ogg Medium", Georgia, serif;
+  font-size: clamp(2.6rem, 6.2vw, 6.4rem);
+  text-shadow: 0 2px 40px rgba(10, 12, 11, 0.45);
+}
+
+.efeuhaus-subline {
+  color: #d9b48f;
+  font-family: Inter, Satoshi, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.efeuhaus-hint {
+  color: #7c8472;
+  font-family: Inter, Satoshi, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
