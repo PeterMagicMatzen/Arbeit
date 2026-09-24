@@ -124,6 +124,7 @@ export default function Efeuhaus() {
 
   return (
     <section
+      id="efeuhaus-hero"
       ref={sectionRef}
       className="efeuhaus-canvas relative"
       style={{ height: "320vh" }}
