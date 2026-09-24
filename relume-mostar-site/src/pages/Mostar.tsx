@@ -2,13 +2,21 @@ import { useEffect, useRef } from "react";
 import { asset } from "@/lib/asset";
 import "./mostar.css";
 
-const SKY = asset("/images/efeuhaus/01_Sky.webp");
-const BACK_FOUR = asset("/images/efeuhaus/02_Glow_Hauptszene.webp");
-const BACK_BAZAAR = asset("/images/efeuhaus/03_Mid-Back.webp");
-const SPLIT_LEFT = asset("/images/efeuhaus/05_Splitframe_Links.webp");
-const SPLIT_RIGHT = asset("/images/efeuhaus/06_Splitframe_Rechts.webp");
-const BRIDGE = asset("/images/efeuhaus/04_Close-up.webp");
-const FRAME_TWO = asset("/images/efeuhaus/07_Vordergrund.webp");
+// Pixel-exact crops pulled straight from Figma via the Base44 "Cinematic
+// Depth Studio" app (same source as the /efeuhaus route), mapped onto this
+// page's scene roles by name/intent: SKY <- widest base photo, BACK_FOUR
+// <- the blurred atmospheric backdrop layer, BACK_BAZAAR <- "Mid-Back",
+// BRIDGE <- the rotated close-up crop, FRAME_TWO <- "Vordergrund"
+// (foreground). Splitframe left/right share the one Splitframe-Rechts
+// crop, same as the source design: the left/right split is produced by
+// this page's own differing transform-origin, not by two source images.
+const SKY = asset("/images/figma-hero/05_base.png");
+const BACK_FOUR = asset("/images/figma-hero/07D.png");
+const BACK_BAZAAR = asset("/images/figma-hero/03_MidBack.png");
+const SPLIT_LEFT = asset("/images/figma-hero/04_SplitframeRechts.png");
+const SPLIT_RIGHT = asset("/images/figma-hero/04_SplitframeRechts.png");
+const BRIDGE = asset("/images/figma-hero/02_CloseUp.png");
+const FRAME_TWO = asset("/images/figma-hero/01_Vordergrund.png");
 
 const ICON1 =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260730_230438_d526b8b6-8a2e-4e3b-9993-3908acae03a7.png";

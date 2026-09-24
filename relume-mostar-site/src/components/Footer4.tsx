@@ -87,7 +87,7 @@ export const Footer4 = (props: Footer4Props) => {
 export const Footer4Defaults: Props = {
   logo: {
     url: "#cinema",
-    src: asset("/images/efeuhaus/07_Vordergrund.webp"),
+    src: asset("/images/figma-hero/01_Vordergrund.png"),
     alt: "Mostar logo mark",
   },
   columnLinks: [
