@@ -3,7 +3,7 @@
 Folge auch den allgemeinen Base44-Hinweisen in `AGENTS.md` und `README.md`.
 
 ## Dieses Repository
-- Enthält den Quellcode der Base44-App „Christophs Noten App“ (Stand: Base44-Checkpoint `44b0bf5`, 11.10.2026).
+- Enthält den Quellcode der Base44-App „Christophs Noten App“ (Stand: Base44-Checkpoint `acd4029`, 12.10.2026).
 - **Nicht automatisch mit Base44 synchronisiert:** die Live-App wird aus Base44 veröffentlicht. Zum Synchronisieren entweder
   GitHub im Base44-Editor verbinden (https://docs.base44.com/developers/app-code/local-development/github) oder
   Änderungen im Base44-Sandbox (siehe unten) machen und hier nachziehen.
@@ -35,12 +35,15 @@ Nach einer Arbeitseinheit: `create_checkpoint`, dann veröffentlichen (Base44-Ed
 `run_command` startet in `/` → immer `cd /app && …`. Build-Check: `cd /app && npm run build` und `npx eslint src --quiet`.
 
 ## Datenbank (Entities, `base44/entities/*.jsonc`, Dateiname = Entity-Name in PascalCase)
-- **Song** (3 Datensätze: `toccata` = Buxtehude Toccata in F BuxWV 157, `bwv870` = Bach Fuge C-Dur, `bwv542` = Bach Fuge g-Moll)
+- **Song** (4 Datensätze: `toccata` = Buxtehude Toccata in F BuxWV 157, `bwv870` = Bach Fuge C-Dur, `bwv542` = Bach Fuge g-Moll,
+  `bwv1066` = Bach Ouverture C-Dur aus der Orchestersuite Nr. 1, Orgelbearbeitung J.-B. Dupont)
   Felder u. a.: slug, title, catalog, composer, subtitle, key_name, instrument, order, duration, measure_count, has_pedal, voice_count,
   third_button (`pedal`|`voices`), accent_color, description, default_names[12], measures[] (Startzeit jedes Takts in s bei 100 %, letzter = Ende),
-  sections[{label, measure}], chords[{s, e, name}], **notes_chunks[]** (Notenliste, Teilstücke einfach aneinanderhängen), note_count.
+  sections[{label, measure}], chords[{s, e, name}], **notes_chunks[]** (Notenliste, Teilstücke einfach aneinanderhängen), note_count,
+  optional **measure_labels[]** (Partitur-Taktnummer je gespieltem Takt, nur bei ausgeschriebenen Wiederholungen – bwv1066:
+  130 gespielte Takte = 1–16, 1–15, 17–114, 116; Anzeige/Springen/Schleife nutzen die Partitur-Nummern, siehe `lib/songs.js`).
   Schreiben nur für Admins (RLS).
-- **SongVariation** (6 Datensätze: je Song „Originaltempo“ tempo_factor 1.0 und „Übungstempo“ 0.6) mit optionaler `audio_url`.
+- **SongVariation** (8 Datensätze: je Song „Originaltempo“ tempo_factor 1.0 und „Übungstempo“ 0.6) mit optionaler `audio_url`.
 - **PracticeResult** (Ergebnisse angemeldeter Nutzer; RLS: nur eigene lesbar).
 
 Notenformat (in notes_chunks): Einträge `Δstart_cs,dauer_cs,midi,code[,name]`, getrennt durch `;`.
@@ -78,14 +81,17 @@ Wichtiges Verhalten:
   Für Audio-Tests braucht der Testserver Range-Requests (sonst springt das Spulen).
 
 ## Stand / offene Punkte
-- **Die 6 Original-Aufnahmen sind noch nicht hochgeladen** (alle audio_url leer). Der Nutzer hat die passenden MP3s
+- **Die 8 Original-Aufnahmen sind noch nicht hochgeladen** (alle audio_url leer; Stand 12.10.2026). Der Nutzer hat die passenden MP3s
   (zugeschnitten auf die Noten; BWV 542 um ~1 Halbton tiefer gestimmt, damit es zur Notation passt):
   `Toccata_BuxWV157_Originaltempo_100.mp3`, `…_Uebungstempo_60.mp3`, `Fuge_C-Dur_BWV870_Originaltempo_100.mp3`, `…_60.mp3`,
-  `Fuge_g-Moll_BWV542_Originaltempo_100.mp3`, `…_60.mp3`. Hochladen: in der App anmelden → Startseite → „Aufnahmen hochladen“.
+  `Fuge_g-Moll_BWV542_Originaltempo_100.mp3`, `…_60.mp3`, `Ouverture_C-Dur_BWV1066_Originaltempo_100.mp3`, `…_Uebungstempo_60.mp3`
+  (die beiden BWV-1066-Dateien wurden aus der Aufnahme des Nutzers erzeugt, 60 % mit Rubberband, Tonhöhe gleich).
+  Hochladen: in der App anmelden → Startseite → „Aufnahmen hochladen“.
 - Mit echtem MIDI-Keyboard noch nicht praktisch getestet (Mikrofon-Erkennung mit synthetischen Aufnahmen getestet: 173/174 Treffer, 0 Fehltreffer).
 - Mit Mikrofon üben → Kopfhörer, sonst hört das Mikrofon die Aufnahme mit.
 
 ## Vorgeschichte (vor der App)
 Aus den Aufnahmen und PDFs des Nutzers wurden Übungsvideos (Falling-Notes, 100 % und 60 %) plus synchrone MIDI-Dateien erzeugt
-(Toccata BuxWV 157 aus Video + PDF, Fuge BWV 870 aus MP3 + PDF, Fuge BWV 542 aus MP3 + PDF). Die Notendaten der App stammen daraus
+(Toccata BuxWV 157 aus Video + PDF, Fuge BWV 870 aus MP3 + PDF, Fuge BWV 542 aus MP3 + PDF, Ouverture BWV 1066 aus MP3 + PDF:
+ Partitur per OMR (Audiveris) + manueller Korrektur, Zeiten per DTW/Spline an die Aufnahme angepasst, inkl. Überpunktierung im Grave). Die Notendaten der App stammen daraus
 (Noten nach der Partitur, zeitlich an die jeweilige Aufnahme angepasst).
