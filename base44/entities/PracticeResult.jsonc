@@ -1,0 +1,71 @@
+{
+  "name": "PracticeResult",
+  "type": "object",
+  "properties": {
+    "song_slug": {
+      "type": "string",
+      "description": "Gespieltes Stück"
+    },
+    "variation_label": {
+      "type": "string",
+      "description": "Gewählte Variation"
+    },
+    "tempo": {
+      "type": "number",
+      "description": "Tempo in Prozent"
+    },
+    "hands": {
+      "type": "string",
+      "description": "Geübte Hände, z. B. rh+lh"
+    },
+    "input_mode": {
+      "type": "string",
+      "enum": [
+        "midi",
+        "mic",
+        "keys"
+      ],
+      "description": "Eingabeart"
+    },
+    "hits": {
+      "type": "integer",
+      "description": "Getroffene Noten"
+    },
+    "total": {
+      "type": "integer",
+      "description": "Erwartete Noten"
+    },
+    "accuracy": {
+      "type": "number",
+      "description": "Trefferquote in Prozent"
+    },
+    "best_combo": {
+      "type": "integer",
+      "description": "Längste Trefferserie"
+    },
+    "from_measure": {
+      "type": "integer",
+      "description": "Starttakt"
+    },
+    "to_measure": {
+      "type": "integer",
+      "description": "Endtakt"
+    }
+  },
+  "required": [
+    "song_slug",
+    "hits",
+    "total"
+  ],
+  "rls": {
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}
