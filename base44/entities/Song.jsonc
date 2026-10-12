@@ -1,0 +1,149 @@
+{
+  "name": "Song",
+  "type": "object",
+  "properties": {
+    "slug": {
+      "type": "string",
+      "description": "Kurzname für die URL, z. B. bwv542"
+    },
+    "title": {
+      "type": "string",
+      "description": "Titel des Stücks"
+    },
+    "catalog": {
+      "type": "string",
+      "description": "Werkverzeichnis-Nummer, z. B. BWV 542"
+    },
+    "composer": {
+      "type": "string",
+      "description": "Komponist"
+    },
+    "subtitle": {
+      "type": "string",
+      "description": "Untertitel / Sammlung"
+    },
+    "key_name": {
+      "type": "string",
+      "description": "Tonart"
+    },
+    "instrument": {
+      "type": "string",
+      "description": "Instrument der Aufnahme"
+    },
+    "order": {
+      "type": "integer",
+      "description": "Reihenfolge auf der Startseite"
+    },
+    "duration": {
+      "type": "number",
+      "description": "Länge der Aufnahme bei 100 % in Sekunden"
+    },
+    "measure_count": {
+      "type": "integer",
+      "description": "Anzahl der Takte"
+    },
+    "has_pedal": {
+      "type": "boolean",
+      "description": "Stück hat eine Pedalstimme"
+    },
+    "voice_count": {
+      "type": "integer",
+      "description": "Anzahl der Stimmen (0 = unbekannt)"
+    },
+    "third_button": {
+      "type": "string",
+      "enum": [
+        "pedal",
+        "voices"
+      ],
+      "description": "Funktion des dritten Knopfes im Spieler"
+    },
+    "accent_color": {
+      "type": "string",
+      "description": "Akzentfarbe für die Startseite (Hex)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Kurzbeschreibung für die Startseite"
+    },
+    "notes_chunks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Notenliste in Teilstücken (aneinanderhängen): Δstart(cs),dauer(cs),midi,hand+3*stimme[,name]; getrennt durch ;"
+    },
+    "note_count": {
+      "type": "integer",
+      "description": "Anzahl der Noten"
+    },
+    "default_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Standard-Notennamen je Tonklasse C..H"
+    },
+    "measures": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "description": "Startzeit jedes Takts in Sekunden (100 %), letzter Eintrag = Ende"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "measure": {
+            "type": "integer"
+          }
+        }
+      },
+      "description": "Abschnitte mit Starttakt"
+    },
+    "chords": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "s": {
+            "type": "number"
+          },
+          "e": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Akkorde mit Start (s), Ende (e) in Sekunden bei 100 % und Name"
+    }
+  },
+  "required": [
+    "slug",
+    "title"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

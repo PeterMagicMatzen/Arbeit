@@ -1,0 +1,52 @@
+{
+  "name": "SongVariation",
+  "type": "object",
+  "properties": {
+    "song_slug": {
+      "type": "string",
+      "description": "Slug des zugeh\u00f6rigen Songs"
+    },
+    "label": {
+      "type": "string",
+      "description": "Anzeigename, z. B. Originaltempo"
+    },
+    "tempo_factor": {
+      "type": "number",
+      "description": "Tempo relativ zur Aufnahme (1 = 100 %, 0.6 = 60 %)"
+    },
+    "audio_url": {
+      "type": "string",
+      "description": "Optionale Aufnahme in diesem Tempo (MP3)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Kurzbeschreibung"
+    },
+    "order": {
+      "type": "integer",
+      "description": "Reihenfolge"
+    }
+  },
+  "required": [
+    "song_slug",
+    "label",
+    "tempo_factor"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
