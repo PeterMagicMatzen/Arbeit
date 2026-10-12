@@ -91,6 +91,13 @@
       },
       "description": "Startzeit jedes Takts in Sekunden (100 %), letzter Eintrag = Ende"
     },
+    "measure_labels": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "description": "Taktnummer der Partitur je gespieltem Takt (nur bei ausgeschriebenen Wiederholungen, sonst leer)"
+    },
     "sections": {
       "type": "array",
       "items": {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Piano, Mic, MousePointerClick, Play, Headphones, Star, RotateCcw, Home, Repeat, LogIn, Check } from 'lucide-react';
 import { COL, GREEN, VOICE_COL } from '@/lib/music';
 import { Clickable } from './StageParts';
+import { measureLabel, perfMeasure, scoreMeasureCount } from '@/lib/songs';
 
 const card = {
   background: 'rgba(21,21,30,.97)', border: '1.5px solid #3A3A4A', borderRadius: 20,
@@ -35,7 +36,7 @@ export function SectionMenu({ sections, current, onPick, onClose }) {
         {sections.map((s, i) => (
           <Clickable key={i} onClick={() => onPick(i)} style={rowBtn(i === current)}>
             <span>{s.label}</span>
-            <span style={{ color: '#9C9CB0', fontSize: 15 }}>ab Takt {s.measure}</span>
+            <span style={{ color: '#9C9CB0', fontSize: 15 }}>ab Takt {s.scoreMeasure ?? s.measure}</span>
           </Clickable>
         ))}
       </div>
@@ -53,10 +54,16 @@ function NumField({ value, onChange, min, max }) {
 }
 
 export function MeasurePanel({ song, current, loop, sectionRange, onGo, onLoop, onClose }) {
-  const [m, setM] = useState(current || 1);
-  const [a, setA] = useState(loop.a);
-  const [b, setB] = useState(loop.b);
-  const max = song.measure_count;
+  // Eingabe in Partitur-Takten; umgerechnet in gespielte Takte (gleich, außer bei ausgeschriebenen Wiederholungen)
+  const lab = (x) => measureLabel(song, x);
+  const [m, setM] = useState(lab(current || 1));
+  const [a, setA] = useState(lab(loop.a));
+  const [b, setB] = useState(lab(loop.b));
+  const max = scoreMeasureCount(song);
+  const startLoop = () => {
+    const pa = perfMeasure(song, Math.min(a, b));
+    onLoop({ on: true, a: pa, b: Math.max(pa, perfMeasure(song, Math.max(a, b), pa)) });
+  };
   return (
     <>
       <Backdrop onClose={onClose} />
@@ -66,7 +73,7 @@ export function MeasurePanel({ song, current, loop, sectionRange, onGo, onLoop, 
         <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 22 }}>
           <NumField value={m} onChange={setM} min={1} max={max} />
           <span style={{ color: '#9C9CB0' }}>von {max}</span>
-          <Clickable onClick={() => onGo(m)} style={{ marginLeft: 'auto', height: 44, padding: '0 20px', borderRadius: 12, background: GREEN, color: '#08130D', fontWeight: 800, fontSize: 17 }}>Springen</Clickable>
+          <Clickable onClick={() => onGo(perfMeasure(song, m))} style={{ marginLeft: 'auto', height: 44, padding: '0 20px', borderRadius: 12, background: GREEN, color: '#08130D', fontWeight: 800, fontSize: 17 }}>Springen</Clickable>
         </div>
         <div style={{ color: '#9C9CB0', fontSize: 15, fontWeight: 600, marginBottom: 8 }}>SCHLEIFE ÜBEN</div>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 12 }}>
@@ -74,10 +81,10 @@ export function MeasurePanel({ song, current, loop, sectionRange, onGo, onLoop, 
           <span>bis</span><NumField value={b} onChange={setB} min={1} max={max} />
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
-          <Clickable onClick={() => onLoop({ on: true, a: Math.min(a, b), b: Math.max(a, b) })} style={{ flex: 1, height: 44, borderRadius: 12, background: GREEN, color: '#08130D', fontWeight: 800, fontSize: 16, textAlign: 'center' }}>
+          <Clickable onClick={startLoop} style={{ flex: 1, height: 44, borderRadius: 12, background: GREEN, color: '#08130D', fontWeight: 800, fontSize: 16, textAlign: 'center' }}>
             <Repeat size={16} style={{ display: 'inline', marginRight: 6, verticalAlign: -2 }} />Schleife starten
           </Clickable>
-          <Clickable onClick={() => { setA(sectionRange[0]); setB(sectionRange[1]); }} style={{ height: 44, padding: '0 14px', borderRadius: 12, background: '#24242F', fontWeight: 700, fontSize: 15 }}>Ganzer Abschnitt</Clickable>
+          <Clickable onClick={() => { setA(lab(sectionRange[0])); setB(lab(sectionRange[1])); }} style={{ height: 44, padding: '0 14px', borderRadius: 12, background: '#24242F', fontWeight: 700, fontSize: 15 }}>Ganzer Abschnitt</Clickable>
           {loop.on && <Clickable onClick={() => onLoop({ ...loop, on: false })} style={{ height: 44, padding: '0 14px', borderRadius: 12, background: '#3A1E27', color: '#FF8DA1', fontWeight: 700, fontSize: 15 }}>Aus</Clickable>}
         </div>
       </div>
@@ -115,7 +122,7 @@ export function InfoPanel({ song, onClose }) {
       <div style={{ ...card, position: 'absolute', left: 460, top: 160, width: 1000, padding: 30, zIndex: 41 }}>
         <PanelHead title={`${song.title}, ${song.catalog}`} onClose={onClose} />
         <div style={{ color: '#CFCFDC', fontSize: 18, lineHeight: 1.5, marginBottom: 18 }}>
-          {song.composer} · {song.subtitle} · {song.key_name} · {song.instrument} · {song.measure_count} Takte<br />{song.description}
+          {song.composer} · {song.subtitle} · {song.key_name} · {song.instrument} · {scoreMeasureCount(song)} Takte<br />{song.description}
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
           <div style={{ fontSize: 17, lineHeight: 1.55, color: '#DADAE6' }}>

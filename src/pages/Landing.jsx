@@ -4,7 +4,7 @@ import { Play, Square, ChevronDown, Piano, Mic, Sparkles, Music2, LogIn, LogOut,
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import NeonHero from '@/components/landing/NeonHero';
-import { fetchSongs, fetchVariations, parseNotes } from '@/lib/songs';
+import { fetchSongs, fetchVariations, parseNotes, scoreMeasureCount } from '@/lib/songs';
 import { engine } from '@/lib/audioEngine';
 import { MidiInput, MicDetector } from '@/lib/inputs';
 import { DEFAULT_NAMES, fmt, neonHue } from '@/lib/music';
@@ -126,10 +126,14 @@ function RecordingAdmin({ variation, onChanged }) {
 }
 
 // ------------------------------------------------------------------ admin: all recordings at once
+const NUMBER_WORDS = ['Kein', 'Ein', 'Zwei', 'Drei', 'Vier', 'Fünf', 'Sechs', 'Sieben', 'Acht', 'Neun', 'Zehn'];
+function piecesText(n) { return `${NUMBER_WORDS[n] || n} ${n === 1 ? 'Stück' : 'Stücke'}`; }
+
 function matchVariation(fileName, variations) {
   const n = fileName.toLowerCase();
   const slug = /toccata|buxwv|157|buxtehude/.test(n) ? 'toccata'
-    : /870|c-dur|c_dur|cdur/.test(n) ? 'bwv870'
+    : /1066|ouvert|overt|suite/.test(n) ? 'bwv1066'
+      : /870|c-dur|c_dur|cdur/.test(n) ? 'bwv870'
       : /542|g-moll|g_moll|gmoll|g_minor|gminor/.test(n) ? 'bwv542' : null;
   if (!slug) return null;
   const slow = /(^|[^0-9])60([^0-9]|$)|uebung|übung|langsam|slow/.test(n);
@@ -167,7 +171,7 @@ function BulkUpload({ songs, variations, onDone }) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="font-bold text-white">Original-Aufnahmen ({have} von {variations.length} hochgeladen)</div>
-          <div className="text-sm text-[#CFCFDC]">Die 6 MP3s aus dem Chat auf einmal auswählen – sie werden anhand des Namens (Stück + „100"/„60") zugeordnet und ab dann immer abgespielt.</div>
+          <div className="text-sm text-[#CFCFDC]">Die {variations.length} MP3s aus dem Chat auf einmal auswählen – sie werden anhand des Namens (Stück + „100"/„60") zugeordnet und ab dann immer abgespielt.</div>
         </div>
         <input ref={inputRef} type="file" accept="audio/*" multiple className="hidden" onChange={(e) => run(e.target.files)} />
         <button type="button" disabled={busy} onClick={() => inputRef.current?.click()} className="inline-flex items-center gap-2 rounded-xl bg-[#B47CFF] px-4 py-2.5 font-bold text-[#12061F] transition hover:brightness-110 disabled:opacity-50">
@@ -191,7 +195,7 @@ function BulkUpload({ songs, variations, onDone }) {
 // ------------------------------------------------------------------ song card
 function SongCard({ song, variations, best, isAdmin, onPlay, onReload }) {
   const accent = song.accent_color || '#35D07F';
-  const chips = [song.key_name, song.instrument, fmt(song.duration || 0), `${song.measure_count} Takte`, song.has_pedal ? 'mit Pedal' : `${song.voice_count || 3} Stimmen`];
+  const chips = [song.key_name, song.instrument, fmt(song.duration || 0), `${scoreMeasureCount(song)} Takte`, song.has_pedal ? 'mit Pedal' : `${song.voice_count || 3} Stimmen`];
   return (
     <article className="group relative flex flex-col rounded-3xl border border-white/10 bg-[#0E0E16] overflow-hidden transition hover:border-white/25 hover:-translate-y-0.5" style={{ boxShadow: `0 20px 60px -30px ${accent}55` }}>
       <MiniRoll song={song} accent={accent} recordingUrl={(variations.find((v) => v.tempo_factor >= 0.99 && v.audio_url) || variations.find((v) => v.audio_url))?.audio_url} />
@@ -379,15 +383,15 @@ export default function Landing() {
       {/* songs */}
       <section id="lieder" className="relative mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6">
         <div className="mb-10 text-center">
-          <div className="text-sm font-bold uppercase tracking-[0.2em] text-[#36C8F0]">Drei Stücke · je zwei Variationen</div>
+          <div className="text-sm font-bold uppercase tracking-[0.2em] text-[#36C8F0]">{piecesText(songs?.length || 4)} · je zwei Variationen</div>
           <h2 className="mt-3 text-3xl font-extrabold sm:text-4xl">Welches Stück möchtest du spielen?</h2>
           <p className="mt-3 text-[#A9A9BA]">Im Originaltempo oder langsam im Übungstempo – das Tempo lässt sich im Spieler jederzeit stufenlos ändern.</p>
         </div>
         {isAdmin && songs && <BulkUpload songs={songs} variations={variations} onDone={() => setReloadKey((k) => k + 1)} />}
         {!songs ? (
-          <div className="grid gap-6 md:grid-cols-3">{[0, 1, 2].map((i) => <div key={i} className="h-[520px] animate-pulse rounded-3xl bg-white/[0.04]" />)}</div>
+          <div className="grid gap-6 md:grid-cols-2">{[0, 1, 2, 3].map((i) => <div key={i} className="h-[520px] animate-pulse rounded-3xl bg-white/[0.04]" />)}</div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className={`grid gap-6 md:grid-cols-2 ${songs.length % 3 === 0 ? 'lg:grid-cols-3' : ''}`}>
             {songs.map((s) => (
               <SongCard key={s.slug} song={s} variations={variations.filter((v) => v.song_slug === s.slug)} best={bestFor(s.slug)} isAdmin={isAdmin} onPlay={play} onReload={() => setReloadKey((k) => k + 1)} />
             ))}
@@ -400,7 +404,7 @@ export default function Landing() {
         <h2 className="text-center text-3xl font-extrabold sm:text-4xl">So funktioniert's</h2>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {[
-            { n: '1', t: 'Lied & Tempo wählen', d: 'Toccata, C-Dur- oder g-Moll-Fuge – im Original- oder Übungstempo. Hände, Pedal, Notennamen und Abschnitte stellst du im Spieler ein.', c: '#35D07F', a: () => scrollTo('lieder'), b: 'Zu den Liedern' },
+            { n: '1', t: 'Lied & Tempo wählen', d: 'Toccata, Ouverture, C-Dur- oder g-Moll-Fuge – im Original- oder Übungstempo. Hände, Pedal, Notennamen und Abschnitte stellst du im Spieler ein.', c: '#35D07F', a: () => scrollTo('lieder'), b: 'Zu den Liedern' },
             { n: '2', t: 'Keyboard verbinden', d: 'Per USB-/MIDI-Kabel spielt dein Keyboard direkt mit. Ohne Kabel hört die App über das Mikrofon zu. Die Bildschirm-Tasten gehen immer.', c: '#5B8DEF', a: () => scrollTo('test'), b: 'Eingabe testen' },
             { n: '3', t: 'Spielen & leuchten', d: 'Triffst du eine Note, leuchtet sie neon auf, die Taste glüht, Funken sprühen – mit Combo-Zähler, Trefferquote und Warte-Modus zum Üben.', c: '#F2709C', a: () => songs?.[0] && variations[0] && play(songs[0], variations.find((v) => v.song_slug === songs[0].slug) || variations[0]), b: 'Direkt loslegen' },
           ].map((s) => (

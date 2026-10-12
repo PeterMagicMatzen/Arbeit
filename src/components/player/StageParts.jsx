@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Pause, Play, Settings2, Mic, MicOff, Piano, Hourglass, Repeat, Music, AudioWaveform } from 'lucide-react';
 import { COL, GREEN } from '@/lib/music';
+import { isRepeatPass, measureLabel, scoreMeasureCount } from '@/lib/songs';
 
 const W = 1920;
 const abs = (left, top, extra = {}) => ({ position: 'absolute', left, top, ...extra });
@@ -125,8 +126,8 @@ export function InfoRow({ song, showNames, onToggleNames, handMode, onCycleHands
         </Clickable>
         <Clickable onClick={onSectionClick} title="Abschnitt wählen" style={abs(880, 132, { width: 330, color: '#fff', fontSize: 34, fontWeight: 800, whiteSpace: 'nowrap', overflow: 'hidden' })}>{info.section}</Clickable>
         <Clickable onClick={onMeasureClick} title="Zu Takt springen / Takte in Schleife üben" style={abs(1190, 112, { width: 150, textAlign: 'right' })}>
-          <div style={{ color: '#9C9CB0', fontSize: 15, fontWeight: 500 }}>von {song.measure_count}</div>
-          <div style={{ color: GREEN, fontSize: 30, fontWeight: 800, lineHeight: '40px', whiteSpace: 'nowrap' }}>{info.measure ? `Takt ${info.measure}` : '–'}</div>
+          <div style={{ color: '#9C9CB0', fontSize: 15, fontWeight: 500, whiteSpace: 'nowrap' }}>{isRepeatPass(song, info.measure) ? 'Wdh. · ' : ''}von {scoreMeasureCount(song)}</div>
+          <div style={{ color: GREEN, fontSize: 30, fontWeight: 800, lineHeight: '40px', whiteSpace: 'nowrap' }}>{info.measure ? `Takt ${measureLabel(song, info.measure)}` : '–'}</div>
         </Clickable>
         <div onClick={onSectionBar} title="Im Abschnitt springen" style={abs(880, 176, { width: 460, height: 16, cursor: 'pointer', pointerEvents: 'auto' })}>
           <div style={abs(0, 6, { width: 460, height: 4, background: '#2C2C38' })} />
@@ -191,7 +192,7 @@ export function BottomBar({ frac, timeText, totalText, sections, duration, curre
         return (
           <React.Fragment key={i}>
             <div style={abs(xa - 1, 54, { width: 2, height: 28, background: '#4A4A58' })} />
-            <Clickable onClick={() => onSection(i)} title={`Zu „${s.label}" springen (Takt ${s.measure})`} style={abs(xa + 2, 50, { width: wdt - 4, height: 36, textAlign: 'center', color: cur ? GREEN : '#E6E6EE', fontWeight: cur ? 700 : 500, fontSize: size, whiteSpace: 'nowrap', overflow: 'hidden' })}>
+            <Clickable onClick={() => onSection(i)} title={`Zu „${s.label}" springen (Takt ${s.scoreMeasure ?? s.measure})`} style={abs(xa + 2, 50, { width: wdt - 4, height: 36, textAlign: 'center', color: cur ? GREEN : '#E6E6EE', fontWeight: cur ? 700 : 500, fontSize: size, whiteSpace: 'nowrap', overflow: 'hidden' })}>
               {s.label}
             </Clickable>
           </React.Fragment>

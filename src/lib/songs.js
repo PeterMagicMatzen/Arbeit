@@ -2,7 +2,7 @@
 import { base44 } from '@/api/base44Client';
 import { DEFAULT_NAMES, HANDS } from './music';
 
-const SLUGS = ['toccata', 'bwv870', 'bwv542'];
+const SLUGS = ['toccata', 'bwv870', 'bwv542', 'bwv1066'];
 
 const FALLBACK_VARIATIONS = SLUGS.flatMap((slug) => [
   { id: `${slug}-100`, song_slug: slug, label: 'Originaltempo', tempo_factor: 1, order: 1, description: 'Spiele im Tempo der Aufnahme (100 %).' },
@@ -94,8 +94,34 @@ export function songSections(song) {
   const M = (m) => song.measures[Math.max(0, Math.min(song.measures.length - 1, m - 1))];
   const end = song.measures[song.measures.length - 1] ?? song.duration;
   const secs = (song.sections || []).map((s, i, arr) => ({
-    label: s.label, measure: s.measure,
+    label: s.label, measure: s.measure, scoreMeasure: measureLabel(song, s.measure),
     s: M(s.measure), e: i + 1 < arr.length ? M(arr[i + 1].measure) : Math.max(end, song.duration || end),
   }));
   return secs;
+}
+
+// Takt-Nummern der Partitur: bei ausgeschriebenen Wiederholungen (measure_labels) weicht die Partitur-Nummer
+// von der gespielten Taktnummer (1 … measure_count) ab. Ohne measure_labels ist alles identisch.
+export function measureLabel(song, m) {
+  const l = song?.measure_labels;
+  return l?.length && m ? (l[m - 1] ?? m) : m;
+}
+
+export function scoreMeasureCount(song) {
+  const l = song?.measure_labels;
+  return l?.length ? Math.max(...l) : song?.measure_count;
+}
+
+// gespielter Takt eines Partitur-Takts (erstes Vorkommen ab `from`; fehlt er, der nächste danach)
+export function perfMeasure(song, label, from = 1) {
+  const l = song?.measure_labels;
+  if (!l?.length) return label;
+  const pick = (ok) => { for (let i = Math.max(0, from - 1); i < l.length; i++) if (ok(l[i])) return i + 1; return 0; };
+  return pick((x) => x === label) || pick((x) => x >= label) || (l.indexOf(label) + 1) || l.length;
+}
+
+// zweiter Durchgang einer Wiederholung?
+export function isRepeatPass(song, m) {
+  const l = song?.measure_labels;
+  return !!(l?.length && m && l.indexOf(l[m - 1]) < m - 1);
 }

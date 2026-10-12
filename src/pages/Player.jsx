@@ -8,8 +8,8 @@ import { engine } from '@/lib/audioEngine';
 import { Transport } from '@/lib/transport';
 import { MidiInput, MicDetector } from '@/lib/inputs';
 import { StageRenderer, CANVAS_H, STAGE_W } from '@/lib/renderer';
-import { loadSong, fetchSongs, songSections } from '@/lib/songs';
-import { chordPitches, composerShort, fmt, lowerBound, neonHue } from '@/lib/music';
+import { loadSong, fetchSongs, songSections, measureLabel } from '@/lib/songs';
+import { chordPitches, composerShort, fmt, isBlack, lowerBound, neonHue } from '@/lib/music';
 import { Header, InfoRow, BottomBar, Hud } from '@/components/player/StageParts';
 import {
   SectionMenu, MeasurePanel, SongMenu, InfoPanel, StatsPanel, SettingsPanel, StartCard, Countdown, ResultCard, Toast, WaitHint,
@@ -348,7 +348,7 @@ export default function Player() {
     const target = M(m);
     if (!started) { startFrom(target); return; }
     seekTo(target - 1.2 * L.current.tempo);
-    toast(`Takt ${m}`);
+    toast(`Takt ${measureLabel(L.current.data.song, m)}`);
   };
 
   const applyLoop = (l) => {
@@ -358,7 +358,7 @@ export default function Player() {
       const target = M(l.a);
       if (!started || !trRef.current.playing) startFrom(target);
       else seekTo(target - 1.2 * L.current.tempo);
-      toast(`Schleife: Takt ${l.a} – ${l.b}`);
+      toast(`Schleife: Takt ${measureLabel(L.current.data.song, l.a)} – ${measureLabel(L.current.data.song, l.b)}`);
     } else toast('Schleife aus');
   };
 
@@ -395,7 +395,8 @@ export default function Player() {
       let minP = 127, maxP = 0, maxLen = 0, end = 0;
       d.notes.forEach((n) => { minP = Math.min(minP, n.p); maxP = Math.max(maxP, n.p); maxLen = Math.max(maxLen, n.e - n.s); end = Math.max(end, n.e); });
       const lo = Math.min(36, Math.floor(minP / 12) * 12);
-      const hi = Math.max(84, maxP % 12 === 0 ? maxP : Math.ceil(maxP / 12) * 12);
+      const hiP = Math.max(84, maxP);
+      const hi = isBlack(hiP) ? hiP + 1 : hiP;   // bis zur nächsten weißen Taste
       d.notes.forEach((n) => { n.hue = neonHue(n.p, lo, hi); });
       Object.assign(d, { lo, hi, maxLen, end, first: d.notes[0].s, sections: songSections(d.song) });
       const vp = search.get('v');
@@ -599,6 +600,7 @@ export default function Player() {
   if (t < song.measures[0]) part = 'START';
   else if (/toccata/i.test(song.title)) part = fugaIdx >= 0 && sec >= fugaIdx ? 'FUGE' : 'TOCCATA';
   else if (/fantasie/i.test(song.title)) part = 'FANTASIE';
+  else if (/ouvert/i.test(song.title)) part = /allegro/i.test(secObj?.label || '') ? 'ALLEGRO' : 'GRAVE';
   const sStart = secObj ? secObj.s : 0;
   const sEnd = secObj ? secObj.e : song.measures[0];
   const sectionFrac = Math.min(1, Math.max(0, (t - sStart) / Math.max(0.01, sEnd - sStart)));
