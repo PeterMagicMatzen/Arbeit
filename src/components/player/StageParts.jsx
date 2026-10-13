@@ -125,8 +125,8 @@ export function InfoRow({ song, showNames, onToggleNames, handMode, onCycleHands
         </Clickable>
         <Clickable onClick={onSectionClick} title="Abschnitt wählen" style={abs(880, 132, { width: 330, color: '#fff', fontSize: 34, fontWeight: 800, whiteSpace: 'nowrap', overflow: 'hidden' })}>{info.section}</Clickable>
         <Clickable onClick={onMeasureClick} title="Zu Takt springen / Takte in Schleife üben" style={abs(1190, 112, { width: 150, textAlign: 'right' })}>
-          <div style={{ color: '#9C9CB0', fontSize: 15, fontWeight: 500 }}>von {song.measure_count}</div>
-          <div style={{ color: GREEN, fontSize: 30, fontWeight: 800, lineHeight: '40px', whiteSpace: 'nowrap' }}>{info.measure ? `Takt ${info.measure}` : '–'}</div>
+          <div style={{ color: '#9C9CB0', fontSize: 15, fontWeight: 500 }}>von {song.measure_total || song.measure_count}</div>
+          <div style={{ color: GREEN, fontSize: 30, fontWeight: 800, lineHeight: '40px', whiteSpace: 'nowrap' }}>{info.measure ? `Takt ${info.measureLabel ?? info.measure}` : '–'}</div>
         </Clickable>
         <div onClick={onSectionBar} title="Im Abschnitt springen" style={abs(880, 176, { width: 460, height: 16, cursor: 'pointer', pointerEvents: 'auto' })}>
           <div style={abs(0, 6, { width: 460, height: 4, background: '#2C2C38' })} />

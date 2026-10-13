@@ -395,7 +395,7 @@ export default function Player() {
       let minP = 127, maxP = 0, maxLen = 0, end = 0;
       d.notes.forEach((n) => { minP = Math.min(minP, n.p); maxP = Math.max(maxP, n.p); maxLen = Math.max(maxLen, n.e - n.s); end = Math.max(end, n.e); });
       const lo = Math.min(36, Math.floor(minP / 12) * 12);
-      const hi = Math.max(84, maxP % 12 === 0 ? maxP : Math.ceil(maxP / 12) * 12);
+      const hi = maxP <= 84 ? 84 : maxP <= 88 ? 88 : (maxP % 12 === 0 ? maxP : Math.ceil(maxP / 12) * 12);
       d.notes.forEach((n) => { n.hue = neonHue(n.p, lo, hi); });
       Object.assign(d, { lo, hi, maxLen, end, first: d.notes[0].s, sections: songSections(d.song) });
       const vp = search.get('v');
@@ -599,6 +599,7 @@ export default function Player() {
   if (t < song.measures[0]) part = 'START';
   else if (/toccata/i.test(song.title)) part = fugaIdx >= 0 && sec >= fugaIdx ? 'FUGE' : 'TOCCATA';
   else if (/fantasie/i.test(song.title)) part = 'FANTASIE';
+  else if (/ouvert/i.test(song.title)) part = /grave|schluss/i.test(secObj?.label || '') ? 'GRAVE' : 'FUGE';
   const sStart = secObj ? secObj.s : 0;
   const sEnd = secObj ? secObj.e : song.measures[0];
   const sectionFrac = Math.min(1, Math.max(0, (t - sStart) / Math.max(0.01, sEnd - sStart)));
@@ -606,6 +607,7 @@ export default function Player() {
   const loopE = loop.on ? song.measures[Math.min(loop.b, song.measures.length - 1)] : null;
   const info = {
     part, section: secObj ? secObj.label : 'Start', measure, sectionFrac,
+    measureLabel: measure ? (song.measure_labels?.[measure - 1] ?? measure) : null,
     loop: loop.on && secObj && loopE > sStart && loopS < sEnd
       ? [Math.max(0, (loopS - sStart) / (sEnd - sStart)), Math.min(1, (loopE - sStart) / (sEnd - sStart))] : null,
   };
