@@ -1,0 +1,14 @@
+{
+  "name": "Christophs Noten App",
+  "description": "Klavier-Lern-App mit MIDI/Mikrofon-Erkennung",
+  "visibility": "private",
+  "entitiesDir": "./entities",
+  "functionsDir": "./functions",
+  "agentsDir": "./agents",
+  "actorsDir": "./actors",
+  "connectorsDir": "./connectors",
+  "authDir": "./auth",
+  "site": {
+    "outputDirectory": "./dist"
+  }
+}
