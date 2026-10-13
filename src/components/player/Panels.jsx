@@ -115,7 +115,7 @@ export function InfoPanel({ song, onClose }) {
       <div style={{ ...card, position: 'absolute', left: 460, top: 160, width: 1000, padding: 30, zIndex: 41 }}>
         <PanelHead title={`${song.title}, ${song.catalog}`} onClose={onClose} />
         <div style={{ color: '#CFCFDC', fontSize: 18, lineHeight: 1.5, marginBottom: 18 }}>
-          {song.composer} · {song.subtitle} · {song.key_name} · {song.instrument} · {song.measure_count} Takte<br />{song.description}
+          {song.composer} · {song.subtitle} · {song.key_name} · {song.instrument} · {song.measure_total || song.measure_count} Takte<br />{song.description}
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
           <div style={{ fontSize: 17, lineHeight: 1.55, color: '#DADAE6' }}>

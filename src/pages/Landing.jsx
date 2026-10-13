@@ -192,7 +192,7 @@ function BulkUpload({ songs, variations, onDone }) {
 // ------------------------------------------------------------------ song card
 function SongCard({ song, variations, best, isAdmin, onPlay, onReload }) {
   const accent = song.accent_color || '#35D07F';
-  const chips = [song.key_name, song.instrument, fmt(song.duration || 0), `${song.measure_count} Takte`, song.has_pedal ? 'mit Pedal' : `${song.voice_count || 3} Stimmen`];
+  const chips = [song.key_name, song.instrument, fmt(song.duration || 0), `${song.measure_total || song.measure_count} Takte`, song.has_pedal ? 'mit Pedal' : `${song.voice_count || 3} Stimmen`];
   return (
     <article className="group relative flex flex-col rounded-3xl border border-white/10 bg-[#0E0E16] overflow-hidden transition hover:border-white/25 hover:-translate-y-0.5" style={{ boxShadow: `0 20px 60px -30px ${accent}55` }}>
       <MiniRoll song={song} accent={accent} recordingUrl={(variations.find((v) => v.tempo_factor >= 0.99 && v.audio_url) || variations.find((v) => v.audio_url))?.audio_url} />
@@ -390,7 +390,7 @@ export default function Landing() {
       {/* songs */}
       <section id="lieder" className="relative mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6">
         <div className="mb-10 text-center">
-          <div className="text-sm font-bold uppercase tracking-[0.2em] text-[#36C8F0]">Drei Stücke · je zwei Variationen</div>
+          <div className="text-sm font-bold uppercase tracking-[0.2em] text-[#36C8F0]">{songs ? `${['', 'Ein', 'Zwei', 'Drei', 'Vier', 'Fünf', 'Sechs'][songs.length] || songs.length} Stücke` : 'Die Stücke'} · je zwei Variationen</div>
           <h2 className="mt-3 text-3xl font-extrabold sm:text-4xl">Welches Stück möchtest du spielen?</h2>
           <p className="mt-3 text-[#A9A9BA]">Im Originaltempo oder langsam im Übungstempo – das Tempo lässt sich im Spieler jederzeit stufenlos ändern.</p>
         </div>
@@ -398,7 +398,7 @@ export default function Landing() {
         {!songs ? (
           <div className="grid gap-6 md:grid-cols-3">{[0, 1, 2].map((i) => <div key={i} className="h-[520px] animate-pulse rounded-3xl bg-white/[0.04]" />)}</div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className={`grid gap-6 ${songs.length % 2 === 0 && songs.length % 3 !== 0 ? 'md:grid-cols-2' : 'md:grid-cols-3'}`}>
             {songs.map((s) => (
               <SongCard key={s.slug} song={s} variations={variations.filter((v) => v.song_slug === s.slug)} best={bestFor(s.slug)} isAdmin={isAdmin} onPlay={play} onReload={() => setReloadKey((k) => k + 1)} />
             ))}
