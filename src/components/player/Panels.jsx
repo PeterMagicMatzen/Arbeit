@@ -65,7 +65,7 @@ export function MeasurePanel({ song, current, loop, sectionRange, onGo, onLoop, 
         <div style={{ color: '#9C9CB0', fontSize: 15, fontWeight: 600, marginBottom: 8 }}>ZU TAKT SPRINGEN</div>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 22 }}>
           <NumField value={m} onChange={setM} min={1} max={max} />
-          <span style={{ color: '#9C9CB0' }}>von {max}</span>
+          <span style={{ color: '#9C9CB0' }}>{song.measure_labels ? `von ${max} (Spielfolge, Takt ${song.measure_labels[Math.max(0, Math.min(max, m || 1) - 1)]})` : `von ${max}`}</span>
           <Clickable onClick={() => onGo(m)} style={{ marginLeft: 'auto', height: 44, padding: '0 20px', borderRadius: 12, background: GREEN, color: '#08130D', fontWeight: 800, fontSize: 17 }}>Springen</Clickable>
         </div>
         <div style={{ color: '#9C9CB0', fontSize: 15, fontWeight: 600, marginBottom: 8 }}>SCHLEIFE ÜBEN</div>

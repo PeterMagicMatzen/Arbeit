@@ -84,6 +84,17 @@
       },
       "description": "Standard-Notennamen je Tonklasse C..H"
     },
+    "measure_labels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Optional: gedruckte Taktnummer je Eintrag in measures (bei Wiederholungen kommen Nummern mehrfach vor)"
+    },
+    "measure_total": {
+      "type": "integer",
+      "description": "Optional: Anzahl der Takte in der Partitur (ohne Wiederholungen)"
+    },
     "measures": {
       "type": "array",
       "items": {

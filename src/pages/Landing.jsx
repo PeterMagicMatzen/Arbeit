@@ -4,7 +4,7 @@ import { Play, Square, ChevronDown, Piano, Mic, Sparkles, Music2, LogIn, LogOut,
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import NeonHero from '@/components/landing/NeonHero';
-import { fetchSongs, fetchVariations, parseNotes } from '@/lib/songs';
+import { fetchSongs, fetchVariations, parseNotes, seedMissingSongs } from '@/lib/songs';
 import { engine } from '@/lib/audioEngine';
 import { MidiInput, MicDetector } from '@/lib/inputs';
 import { DEFAULT_NAMES, fmt, neonHue } from '@/lib/music';
@@ -128,9 +128,10 @@ function RecordingAdmin({ variation, onChanged }) {
 // ------------------------------------------------------------------ admin: all recordings at once
 function matchVariation(fileName, variations) {
   const n = fileName.toLowerCase();
-  const slug = /toccata|buxwv|157|buxtehude/.test(n) ? 'toccata'
-    : /870|c-dur|c_dur|cdur/.test(n) ? 'bwv870'
-      : /542|g-moll|g_moll|gmoll|g_minor|gminor/.test(n) ? 'bwv542' : null;
+  const slug = /1066|ouvert|suite/.test(n) ? 'bwv1066'
+    : /toccata|buxwv|157|buxtehude/.test(n) ? 'toccata'
+      : /870|c-dur|c_dur|cdur/.test(n) ? 'bwv870'
+        : /542|g-moll|g_moll|gmoll|g_minor|gminor/.test(n) ? 'bwv542' : null;
   if (!slug) return null;
   const slow = /(^|[^0-9])60([^0-9]|$)|uebung|übung|langsam|slow/.test(n);
   return variations.find((v) => v.song_slug === slug && (slow ? v.tempo_factor < 0.99 : v.tempo_factor >= 0.99)) || null;
@@ -167,7 +168,7 @@ function BulkUpload({ songs, variations, onDone }) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="font-bold text-white">Original-Aufnahmen ({have} von {variations.length} hochgeladen)</div>
-          <div className="text-sm text-[#CFCFDC]">Die 6 MP3s aus dem Chat auf einmal auswählen – sie werden anhand des Namens (Stück + „100"/„60") zugeordnet und ab dann immer abgespielt.</div>
+          <div className="text-sm text-[#CFCFDC]">Alle MP3s aus dem Chat auf einmal auswählen – sie werden anhand des Namens (Stück + „100"/„60") zugeordnet und ab dann immer abgespielt.</div>
         </div>
         <input ref={inputRef} type="file" accept="audio/*" multiple className="hidden" onChange={(e) => run(e.target.files)} />
         <button type="button" disabled={busy} onClick={() => inputRef.current?.click()} className="inline-flex items-center gap-2 rounded-xl bg-[#B47CFF] px-4 py-2.5 font-bold text-[#12061F] transition hover:brightness-110 disabled:opacity-50">
@@ -330,6 +331,16 @@ export default function Landing() {
   const play = (song, v) => navigate(`/spielen/${song.slug}?v=${encodeURIComponent(v.id)}`);
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   const isAdmin = user?.role === 'admin';
+
+  // Admin: create database records for newly added pieces (they exist only as files in /public/data until then)
+  const seeded = useRef(false);
+  useEffect(() => {
+    if (!isAdmin || seeded.current || !songs?.some((s) => s._static)) return;
+    seeded.current = true;
+    seedMissingSongs()
+      .then((created) => { if (created.length) setReloadKey((k) => k + 1); })
+      .catch((e) => console.warn('Neue Stücke konnten nicht angelegt werden', e));
+  }, [isAdmin, songs]);
 
   return (
     <div className="min-h-screen bg-[#05050A] text-white" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
