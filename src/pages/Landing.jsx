@@ -411,7 +411,7 @@ export default function Landing() {
         <h2 className="text-center text-3xl font-extrabold sm:text-4xl">So funktioniert's</h2>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {[
-            { n: '1', t: 'Lied & Tempo wählen', d: 'Toccata, C-Dur- oder g-Moll-Fuge – im Original- oder Übungstempo. Hände, Pedal, Notennamen und Abschnitte stellst du im Spieler ein.', c: '#35D07F', a: () => scrollTo('lieder'), b: 'Zu den Liedern' },
+            { n: '1', t: 'Lied & Tempo wählen', d: 'Toccata, Fuge oder Ouvertüre – im Original- oder Übungstempo. Hände, Pedal, Notennamen und Abschnitte stellst du im Spieler ein.', c: '#35D07F', a: () => scrollTo('lieder'), b: 'Zu den Liedern' },
             { n: '2', t: 'Keyboard verbinden', d: 'Per USB-/MIDI-Kabel spielt dein Keyboard direkt mit. Ohne Kabel hört die App über das Mikrofon zu. Die Bildschirm-Tasten gehen immer.', c: '#5B8DEF', a: () => scrollTo('test'), b: 'Eingabe testen' },
             { n: '3', t: 'Spielen & leuchten', d: 'Triffst du eine Note, leuchtet sie neon auf, die Taste glüht, Funken sprühen – mit Combo-Zähler, Trefferquote und Warte-Modus zum Üben.', c: '#F2709C', a: () => songs?.[0] && variations[0] && play(songs[0], variations.find((v) => v.song_slug === songs[0].slug) || variations[0]), b: 'Direkt loslegen' },
           ].map((s) => (
