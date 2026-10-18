@@ -36,7 +36,8 @@ Nach einer Arbeitseinheit: `create_checkpoint`, dann veröffentlichen (Base44-Ed
 ## Datenbank (Entities, `base44/entities/*.jsonc`, Dateiname = Entity-Name in PascalCase)
 - **Song** (`toccata` = Buxtehude Toccata in F BuxWV 157, `bwv870` = Bach Fuge C-Dur, `bwv542` = Bach Fuge g-Moll,
   `bwv1066` = Bach Ouvertüre C-Dur aus der Orchestersuite Nr. 1, Orgelfassung,
-  `flying` = „Flying“ aus Peter Pan, J. N. Howard, Orgelfassung Anna Lapwood – order 8; in Base44 gibt es außerdem
+  `flying` = „Flying“ aus Peter Pan, J. N. Howard, Orgelfassung Anna Lapwood – order 8, `gigout` = Gigout Toccata h-Moll
+  (Dix pièces Nr. 4, Schott-Ausgabe, 185 Takte) – order 9; in Base44 gibt es außerdem
   `bwv854`, `boellmann`, `bruhns`, dort direkt angelegt)
   Felder u. a.: slug, title, catalog, composer, subtitle, key_name, instrument, order, duration, measure_count, has_pedal, voice_count,
   third_button (`pedal`|`voices`), accent_color, description, default_names[12], measures[] (Startzeit jedes Takts in s bei 100 %, letzter = Ende),
