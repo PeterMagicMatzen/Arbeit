@@ -128,7 +128,8 @@ function RecordingAdmin({ variation, onChanged }) {
 // ------------------------------------------------------------------ admin: all recordings at once
 function matchVariation(fileName, variations) {
   const n = fileName.toLowerCase();
-  const slug = /flying|peter.?pan/.test(n) ? 'flying'
+  const slug = /gigout/.test(n) ? 'gigout'
+    : /flying|peter.?pan/.test(n) ? 'flying'
     : /1066|ouvert|suite/.test(n) ? 'bwv1066'
     : /toccata|buxwv|157|buxtehude/.test(n) ? 'toccata'
       : /870|c-dur|c_dur|cdur/.test(n) ? 'bwv870'
