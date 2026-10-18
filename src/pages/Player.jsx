@@ -600,6 +600,7 @@ export default function Player() {
   else if (/toccata/i.test(song.title)) part = fugaIdx >= 0 && sec >= fugaIdx ? 'FUGE' : 'TOCCATA';
   else if (/fantasie/i.test(song.title)) part = 'FANTASIE';
   else if (/ouvert/i.test(song.title)) part = /grave|schluss/i.test(secObj?.label || '') ? 'GRAVE' : 'FUGE';
+  else if (/flying/i.test(song.title)) part = 'FLYING';
   const sStart = secObj ? secObj.s : 0;
   const sEnd = secObj ? secObj.e : song.measures[0];
   const sectionFrac = Math.min(1, Math.max(0, (t - sStart) / Math.max(0.01, sEnd - sStart)));
