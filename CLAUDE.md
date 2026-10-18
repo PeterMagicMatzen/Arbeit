@@ -35,7 +35,9 @@ Nach einer Arbeitseinheit: `create_checkpoint`, dann veröffentlichen (Base44-Ed
 
 ## Datenbank (Entities, `base44/entities/*.jsonc`, Dateiname = Entity-Name in PascalCase)
 - **Song** (`toccata` = Buxtehude Toccata in F BuxWV 157, `bwv870` = Bach Fuge C-Dur, `bwv542` = Bach Fuge g-Moll,
-  `bwv1066` = Bach Ouvertüre C-Dur aus der Orchestersuite Nr. 1, Orgelfassung)
+  `bwv1066` = Bach Ouvertüre C-Dur aus der Orchestersuite Nr. 1, Orgelfassung,
+  `flying` = „Flying“ aus Peter Pan, J. N. Howard, Orgelfassung Anna Lapwood – order 8; in Base44 gibt es außerdem
+  `bwv854`, `boellmann`, `bruhns`, dort direkt angelegt)
   Felder u. a.: slug, title, catalog, composer, subtitle, key_name, instrument, order, duration, measure_count, has_pedal, voice_count,
   third_button (`pedal`|`voices`), accent_color, description, default_names[12], measures[] (Startzeit jedes Takts in s bei 100 %, letzter = Ende),
   sections[{label, measure}], chords[{s, e, name}], **notes_chunks[]** (Notenliste, Teilstücke einfach aneinanderhängen), note_count,
@@ -83,6 +85,9 @@ Wichtiges Verhalten:
   Für Audio-Tests braucht der Testserver Range-Requests (sonst springt das Spulen).
 
 ## Stand / offene Punkte
+- Flying: Aufnahme = Filmmusik-MP3 des Nutzers (urheberrechtlich geschützt, deshalb nicht selbst hochgeladen);
+  `Flying_PeterPan_Originaltempo_100.mp3` / `…_Uebungstempo_60.mp3` lädt der Nutzer über „Aufnahmen hochladen“ hoch.
+  Gespielte Form laut Aufnahme: T. 1, (2–3)×2, 4–5, (6–7)×3, (8–9)×3, 10–68; Pedal in T. 4–10 mit 2′-Flöte (klingt 2 Oktaven höher, notiert ist die gegriffene Taste).
 - Original-Aufnahmen: Der Nutzer hat die passenden MP3s (zugeschnitten auf die Noten; BWV 542 um ~1 Halbton tiefer gestimmt,
   damit es zur Notation passt): `Toccata_BuxWV157_Originaltempo_100.mp3`, `…_Uebungstempo_60.mp3`, `Fuge_C-Dur_BWV870_Originaltempo_100.mp3`,
   `…_60.mp3`, `Fuge_g-Moll_BWV542_Originaltempo_100.mp3`, `…_60.mp3`, `Ouvertuere_BWV1066_Originaltempo_100.mp3`, `…_Uebungstempo_60.mp3`.
