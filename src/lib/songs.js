@@ -2,7 +2,7 @@
 import { base44 } from '@/api/base44Client';
 import { DEFAULT_NAMES, HANDS } from './music';
 
-const SLUGS = ['toccata', 'bwv870', 'bwv542', 'bwv1066'];
+const SLUGS = ['toccata', 'bwv870', 'bwv542', 'bwv1066', 'flying'];
 
 const FALLBACK_VARIATIONS = SLUGS.flatMap((slug) => [
   { id: `${slug}-100`, song_slug: slug, label: 'Originaltempo', tempo_factor: 1, order: 1, description: 'Spiele im Tempo der Aufnahme (100 %).' },
