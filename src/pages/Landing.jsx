@@ -129,6 +129,7 @@ function RecordingAdmin({ variation, onChanged }) {
 function matchVariation(fileName, variations) {
   const n = fileName.toLowerCase();
   const slug = /gigout/.test(n) ? 'gigout'
+    : /bwv.?615|in.?dir.?ist.?freude/.test(n) ? 'bwv615'
     : /flying|peter.?pan/.test(n) ? 'flying'
     : /1066|ouvert|suite/.test(n) ? 'bwv1066'
     : /toccata|buxwv|157|buxtehude/.test(n) ? 'toccata'
