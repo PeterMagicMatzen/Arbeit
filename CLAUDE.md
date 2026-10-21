@@ -39,6 +39,7 @@ Nach einer Arbeitseinheit: `create_checkpoint`, dann veröffentlichen (Base44-Ed
   `flying` = „Flying“ aus Peter Pan, J. N. Howard, Orgelfassung Anna Lapwood – order 8, `gigout` = Gigout Toccata h-Moll
   (Dix pièces Nr. 4, Schott-Ausgabe, 185 Takte) – order 9; in Base44 gibt es außerdem
   `bwv854`, `boellmann`, `bruhns`, dort direkt angelegt)
+  Zusätzlich `bwv615` = „In dir ist Freude“ BWV 615 (Bach, Notenblatt-PDF + MIDI; Timing aus der MIDI-Datei, Originalaufnahme noch offen) – order 10.
   Felder u. a.: slug, title, catalog, composer, subtitle, key_name, instrument, order, duration, measure_count, has_pedal, voice_count,
   third_button (`pedal`|`voices`), accent_color, description, default_names[12], measures[] (Startzeit jedes Takts in s bei 100 %, letzter = Ende),
   sections[{label, measure}], chords[{s, e, name}], **notes_chunks[]** (Notenliste, Teilstücke einfach aneinanderhängen), note_count,
